@@ -1,6 +1,6 @@
 <?php
 
-namespace iutnc\deefy\exception;
+namespace iutnc\deefy\exceptions;
 
 class InvalidPropertyValueException extends \Exception {
     public function __construct($property, $value, $code = 0, Throwable $previous = null) {

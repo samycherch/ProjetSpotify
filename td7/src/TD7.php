@@ -1,11 +1,11 @@
 <?php
-require_once  './src/classes/AlbumTrack.php';
-require_once  './src/classes/PodcastTrack.php';
-// require_once  './src/classes/InvalidPropertyNameException.php';
-// require_once  './src/classes/InvalidPropertyValueException.php';
-require_once  './src/classes/Album.php';
-require_once  './src/classes/Playlist.php';
-require_once  './src/classes/AudioListRenderer.php';
+require_once  './src/classes/tracks/AlbumTrack.php';
+require_once  './src/classes/tracks/PodcastTrack.php';
+// require_once  './src/classes/exception/InvalidPropertyNameException.php';
+// require_once  './src/classes/exception/InvalidPropertyValueException.php';
+require_once  './src/classes/lists/Album.php';
+require_once  './src/classes/lists/Playlist.php';
+require_once  './src/classes/render/AudioListRenderer.php';
 
 use iutnc\deefy\audio\tracks\AlbumTrack;
 use iutnc\deefy\audio\tracks\PodcastTrack;
