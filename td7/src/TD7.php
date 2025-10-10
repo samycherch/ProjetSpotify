@@ -1,11 +1,11 @@
 <?php
-require_once  './src/classes/tracks/AlbumTrack.php';
-require_once  './src/classes/tracks/PodcastTrack.php';
-// require_once  './src/classes/exception/InvalidPropertyNameException.php';
-// require_once  './src/classes/exception/InvalidPropertyValueException.php';
-require_once  './src/classes/lists/Album.php';
-require_once  './src/classes/lists/Playlist.php';
-require_once  './src/classes/render/AudioListRenderer.php';
+require_once  './classes/tracks/AlbumTrack.php';
+require_once  './classes/tracks/PodcastTrack.php';
+// require_once  './classes/exception/InvalidPropertyNameException.php';
+// require_once  './classes/exception/InvalidPropertyValueException.php';
+require_once  './classes/lists/Album.php';
+require_once  './classes/lists/Playlist.php';
+require_once  './classes/render/AudioListRenderer.php';
 
 use iutnc\deefy\audio\tracks\AlbumTrack;
 use iutnc\deefy\audio\tracks\PodcastTrack;
@@ -13,7 +13,7 @@ use iutnc\deefy\audio\lists\Album;
 use iutnc\deefy\audio\lists\Playlist;
 use iutnc\deefy\render\AudioListRenderer;
 
-echo "<h1>TD5</h1>";
+echo "<h1>TD7</h1>";
 
 try {
     $piste1 = new AlbumTrack(
