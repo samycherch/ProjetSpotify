@@ -6,12 +6,17 @@ require_once  './classes/tracks/PodcastTrack.php';
 require_once  './classes/lists/Album.php';
 require_once  './classes/lists/Playlist.php';
 require_once  './classes/render/AudioListRenderer.php';
+require_once './classes/Autoloader.php';
+
 
 use iutnc\deefy\audio\tracks\AlbumTrack;
 use iutnc\deefy\audio\tracks\PodcastTrack;
 use iutnc\deefy\audio\lists\Album;
 use iutnc\deefy\audio\lists\Playlist;
 use iutnc\deefy\render\AudioListRenderer;
+
+$autoloader = new \iutnc\deefy\Autoloader('iutnc\deefy', __DIR__ . '/classes');
+$autoloader->register();
 
 echo "<h1>TD7</h1>";
 
