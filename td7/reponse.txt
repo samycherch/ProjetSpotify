@@ -1,0 +1,57 @@
+1. Dans quel fichier est définie la classe Logger ? Préciser son namespace.
+Fichier : src/Monolog/Logger.php
+Namespace : Monolog\Logger
+
+
+2. Les classes ErrorHandler et Registry sont-elles définies dans le même namespace ? Si oui, lequel ?
+Oui, elles sont toutes les deux dans src/Monolog/
+Namespace commun : Monolog
+
+
+3. Quel est le namespace commun aux classes stockées dans des fichiers créés directement dans le répertoire Handler ?
+Namespace : Monolog\Handler
+(Toutes les classes dans le dossier src/Monolog/Handler/ sont dans ce namespace)
+
+
+4. Indiquez le chemin complet du fichier dans lequel est déclarée la classe (exemple : HandlerInterface).
+Classe HandlerInterface : chemin src/Monolog/Handler/HandlerInterface.php
+Namespace : Monolog\Handler
+
+
+5. Exemple : Indiquez le chemin complet du fichier dans lequel est déclarée la classe ErrorHandler.
+Chemin : src/Monolog/ErrorHandler.php
+Namespace : Monolog
+
+
+6. On souhaite ajouter la classe JsonFormatter dont le namespace est Monolog\Formatter.
+Où doit-on créer le fichier correspondant ? Et comment doit-on le nommer ?
+Chemin : src/Monolog/Formatter/JsonFormatter.php
+Nom fichier : JsonFormatter.php
+Namespace dans le fichier : Monolog\Formatter
+
+
+7. On crée le fichier src/Monolog/Formatter/sql/SqlFormatter.php.
+Indiquez le nom de la classe qu'il peut définir et son namespace.
+Classe : SqlFormatter
+Namespace : Monolog\Formatter\sql
+
+
+8. On change le nom de la classe. Quel est l’impact sur le fichier où la classe est déclarée ?
+Selon PSR-4, le nom du fichier doit correspondre au nom de la classe déclarée.
+Si tu changes le nom de la classe, il faut aussi renommer le fichier pour garder la correspondance.
+
+
+9. En exécutant un programme utilisant cette librairie, on obtient une erreur class not found.
+Quelles sont les causes possibles ?
+Mauvaise déclaration du namespace
+Mauvais chemin ou nom de fichier
+Mauvaise configuration PSR-4 dans composer.json ou autoloader custom
+Classe/fichier absent ou supprimé
+Erreur de casse (majuscules/minuscules différentes)
+Classe instanciée avec le mauvais namespace
+
+
+10. On renomme le dossier src en lib. Quel est l’impact ? Que faut-il changer ?
+Tu dois mettre à jour la configuration PSR-4 (dans composer.json ou ton autoloader) pour indiquer 
+que le prefixe Monolog\ correspond maintenant au chemin lib/Monolog/ au lieu de src/Monolog/. 
+Sinon, les classes ne seront plus trouvées.
