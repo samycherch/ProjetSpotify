@@ -1,6 +1,6 @@
 <?php
 
-namespace iutnc\deefy\audio\lists;
+namespace iutnc\deefy\lists;
 
 require_once 'AudioList.php';
 

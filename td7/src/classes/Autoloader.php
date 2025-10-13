@@ -1,5 +1,5 @@
 <?php
-namespace iutnc\deefy;
+namespace loader;
 
 class Autoloader {
     private string $prefix;
@@ -11,14 +11,13 @@ class Autoloader {
     }
 
     public function loadClass(string $className): void {
-        // Vérifie le préfixe
         $len = strlen($this->prefix);
         if (strncmp($this->prefix, $className, $len) !== 0) return;
 
-        // Namespace relatif (sans le préfixe)
+        
         $relativeClass = substr($className, $len);
 
-        // Remplace \ par /
+        
         $file = $this->baseDir . str_replace('\\', DIRECTORY_SEPARATOR, $relativeClass) . '.php';
 
         if (is_file($file)) {

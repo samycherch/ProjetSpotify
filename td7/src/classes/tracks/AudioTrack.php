@@ -1,5 +1,5 @@
 <?php
-namespace iutnc\deefy\audio\tracks;
+namespace iutnc\deefy\tracks;
 
 use iutnc\deefy\exception\InvalidPropertyNameException;
 use iutnc\deefy\exception\InvalidPropertyValueException;
