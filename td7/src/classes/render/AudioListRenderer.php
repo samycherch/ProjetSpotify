@@ -1,8 +1,8 @@
 <?php
 namespace iutnc\deefy\render;
 
-use iutnc\deefy\audio\lists\AudioList;
-use iutnc\deefy\audio\tracks\AudioTrack;
+use iutnc\deefy\lists\AudioList;
+use iutnc\deefy\tracks\AudioTrack;
 
 interface Renderer {
     public function render(): string;

@@ -1,8 +1,5 @@
 <?php
-require_once __DIR__ . '/classes/Autoloader.php';
-
-$autoloader = new \loader\Autoloader("iutnc\\deefy\\", __DIR__ . "/classes");
-$autoloader->register();
+require_once __DIR__ . '/vendor/autoload.php';
 
 use iutnc\deefy\tracks\AlbumTrack;
 use iutnc\deefy\tracks\PodcastTrack;
