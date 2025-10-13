@@ -1,0 +1,7 @@
+1. Requête HTTP
+
+Essayez une exécution de ce programme en ligne de commande. Retrouve-t-on les mêmes
+informations ? Pourquoi ?
+
+Non on ne retrouve pas les mêmes informations, car il n'y a pas de requête HTTP et donc $SERVER
+à moins d'informations car le script ne passe pas par le serveur Web.
