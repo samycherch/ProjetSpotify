@@ -132,7 +132,7 @@ echo "<h1>Exercice 3 : AudioList / Album / Playlist</h1>";
 
 
 echo "<h2>Album</h2>";
-$album = new Album("Best of FIR", [$piste1, $piste2], "Falling in Reverse", 2023);
+$album = new Album("Best of Falling In Reverse", [$piste1, $piste2], "Falling in Reverse", 2023);
 echo $album . "<br>";
 
 
