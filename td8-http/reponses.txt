@@ -5,3 +5,28 @@ informations ? Pourquoi ?
 
 Non on ne retrouve pas les mêmes informations, car il n'y a pas de requête HTTP et donc $SERVER
 à moins d'informations car le script ne passe pas par le serveur Web.
+
+3. Fabriquer des réponses
+
+    2. Placer l'appel à cette fonction en fin du programme, et examinez le résultat ; Que se
+       passe-t-il ? Pourquoi ?
+
+    On ne nous affiche pas "201 Created" car les requêtes HTTP sont lancées avec echo donc 
+    http_response_code(201) ne peux pas modifier un code déjà créer
+
+    3. Où faut-il placer cet appel à la fonction header() ?
+
+    L'appel à la fonction header() se fait au début du code car on lance la requête HTTP juste après
+
+    4. Placer l'appel à cette fonction header() à la fin du programme. Exécuter le 
+    programme et expliquer le message d'avertissement qui est produit.
+
+    Le message d'avertissement nous dit que le header ne peux pas être pris en compte à la fin car
+    les requêtes HTTP ont déjà été lancées et donc le header est inutile ici.
+
+    5. En conservant l'appel à la fonction header() en fin de programme, ajouter au début
+    du programme un appel à la fonction ob_start() ; Exécuter à nouveau le
+    programme ; A-t-on encore le message d'avertissement ? Pourquoi ?
+
+    ob_start() créer une mémoire temporaire qui permet une fois que tout les différents affichages sont 
+    en mémoire de enfin lancé les requêtes HTTP.
