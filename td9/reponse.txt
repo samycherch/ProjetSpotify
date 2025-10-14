@@ -15,4 +15,13 @@
     cookies dans 1 requête.
 
     Le nom du header transportant les cookies est Cookie.
-    
+
+
+5. Manipulation externe
+    En utilisant l'extension de fabrication de requêtes installée sur votre navigateur, fabriquer une
+    requête d'appel au programme de la partie 3 en lui ajoutant un header transportant une valeur
+    modifiée du cookie compteur. Transmettre la requête au serveur, puis appeler le script
+    classiquement. Que se passe-t-il pour le cookie ?
+
+    Lorsqu'on met un valeur modifiée pour le cookie et qu'on transmet la requête au serveur, alors le script renvoie
+    la valeur modifiée plus 1.
