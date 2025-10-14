@@ -1,0 +1,18 @@
+1. Créer un cookie
+
+    Quel est le nom du header transportant le cookie dans la réponse ?
+
+    Le nom du header qui transporte le cookie s'appel Set-Cookie
+
+2. Lire un cookie
+
+    Appeler ce programme avec un autre navigateur : que se passe-t-il ? pourquoi ?
+
+    Lorsqu'on ouvre le programme avec un autre navigateur ou en navigation privée,
+    le programme recrée le cookie car c'est le navigateur qui enregistre le cookie
+
+3.  En utilisant les outils de dev. du navigateur, trouver le nom du header transportant les
+    cookies dans 1 requête.
+
+    Le nom du header transportant les cookies est Cookie.
+    
