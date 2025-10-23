@@ -10,7 +10,18 @@ class DisplayPlaylistAction extends Action {
     protected function executeGet() : string {
         $this->safeSessionStart();
 
-        $html = '<h2>Playlists en session</h2>';
+        // Menu de navigation - exactement même qu'ailleurs (haut de page)
+        $menu = '
+            <nav style="margin-bottom:15px; background:#eef; padding:10px;">
+                <a href="?action=default">Accueil</a> |
+                <a href="?action=add-user">Inscription utilisateur</a> |
+                <a href="?action=add-playlist">Créer une playlist</a> |
+                <a href="?action=playlist">Voir les playlists</a> |
+                <a href="?action=add-track">Ajouter un track</a>
+            </nav>
+        ';
+
+        $html = $menu . '<h2>Playlists en session</h2>';
         if (!isset($_SESSION['playlists']) || count($_SESSION['playlists']) == 0) {
             $html .= '<p>Aucune playlist en session.</p>';
         } else {
@@ -22,18 +33,16 @@ class DisplayPlaylistAction extends Action {
                     <input type="text" name="newname" placeholder="Nouveau nom">
                     <button type="submit" name="rename" value="'.$i.'">Modifier</button>
                 </form>';
-                // Affichage des tracks
+                // Affichage des tracks, support array (upload) ou string (ancien format)
                 if (isset($pl['tracks']) && count($pl['tracks']) > 0) {
                     $html .= '<ul>';
                     foreach ($pl['tracks'] as $track) {
                         if (is_array($track)) {
-                            // Track uploadé : afficher nom + audio
                             $nom = htmlspecialchars($track['nom']);
                             $file = $track['file'] ? htmlspecialchars($track['file']) : '';
                             $audio = $file ? '<audio controls src="audio/'.$file.'"></audio>' : '';
                             $html .= '<li><strong>' . $nom . '</strong> ' . $audio . '</li>';
                         } else {
-                            // Track historique
                             $html .= '<li>' . htmlspecialchars($track) . '</li>';
                         }
                     }
@@ -44,7 +53,6 @@ class DisplayPlaylistAction extends Action {
                 $html .= '</div>';
             }
         }
-        $html .= '<a href="?action=add-playlist">Créer une playlist</a> | <a href="?action=add-track">Ajouter un track</a> | <a href="?action=default">Retour à l\'accueil</a>';
 
         // Message d'erreur/réussite
         if (isset($_SESSION['playlist_msg'])) {
@@ -71,7 +79,7 @@ class DisplayPlaylistAction extends Action {
             }
             return $this->executeGet();
         }
-        // Modification du nom (doublon interdit)
+        // Modification du nom avec vérif doublons
         if (isset($_POST['rename'], $_POST['newname'])) {
             $id = intval($_POST['rename']);
             $newname = trim($_POST['newname']);

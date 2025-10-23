@@ -2,19 +2,24 @@
 namespace iutnc\deefy\action;
 
 class AddPodcastTrackAction extends Action {
-
     private function safeSessionStart() {
         if(session_status() !== PHP_SESSION_ACTIVE) session_start();
     }
-
     protected function executeGet() : string {
         $this->safeSessionStart();
+        $menu = '
+            <nav style="margin-bottom:15px; background:#eef; padding:10px;">
+                <a href="?action=default">Accueil</a> |
+                <a href="?action=add-user">Inscription utilisateur</a> |
+                <a href="?action=add-playlist">Créer une playlist</a> |
+                <a href="?action=playlist">Voir les playlists</a> |
+                <a href="?action=add-track">Ajouter un track</a>
+            </nav>
+        ';
         if (!isset($_SESSION['playlists']) || count($_SESSION['playlists']) == 0) {
-            return '
+            return $menu . '
                 <h2>Ajouter un track</h2>
                 <p style="color:red;">Aucune playlist disponible. Créez d\'abord une playlist !</p>
-                <a href="?action=add-playlist">Créer une playlist</a>
-                | <a href="?action=default">Retour à l\'accueil</a>
             ';
         }
         $options = '';
@@ -25,10 +30,8 @@ class AddPodcastTrackAction extends Action {
         if ($err) {
             $msg = '<p style="color:red;">' . htmlspecialchars($err) . '</p>';
             unset($_SESSION['track_error']);
-        } else {
-            $msg = '';
-        }
-        return $msg . '
+        } else $msg = '';
+        return $menu . $msg . '
             <h2>Ajouter un track à une playlist (avec upload .mp3)</h2>
             <form method="post" action="?action=add-track" enctype="multipart/form-data">
                 <input name="track" placeholder="Nom du morceau">
@@ -36,18 +39,13 @@ class AddPodcastTrackAction extends Action {
                 <input type="file" name="audiofile" accept=".mp3">
                 <button type="submit">Ajouter Track</button>
             </form>
-            <a href="?action=playlist">Voir les playlists</a>
-            | <a href="?action=default">Retour à l\'accueil</a>
         ';
     }
-
     protected function executePost() : string {
         $this->safeSessionStart();
         $track = $_POST['track'] ?? '';
         $playlistIndex = $_POST['playlist'] ?? null;
         $audioFileInfo = $_FILES['audiofile'] ?? null;
-
-        // Validation
         if (trim($track) === '') {
             $_SESSION['track_error'] = "Veuillez indiquer le nom du morceau !";
             return $this->executeGet();
@@ -56,7 +54,6 @@ class AddPodcastTrackAction extends Action {
             $_SESSION['track_error'] = "Playlist introuvable.";
             return $this->executeGet();
         }
-
         $filenameOnDisk = null;
         if ($audioFileInfo && $audioFileInfo['error'] === UPLOAD_ERR_OK) {
             $filename = $audioFileInfo['name'];
@@ -65,7 +62,6 @@ class AddPodcastTrackAction extends Action {
                 $_SESSION['track_error'] = "Seuls les fichiers .mp3 sont acceptés.";
                 return $this->executeGet();
             }
-            // Dossier "audio" (assure-toi qu'il existe et qu'il est accessible en écriture)
             $uploadDir = dirname(__DIR__).DIRECTORY_SEPARATOR.'audio'.DIRECTORY_SEPARATOR;
             $targetName = uniqid("track_").".mp3";
             $targetPath = $uploadDir . $targetName;
@@ -75,20 +71,10 @@ class AddPodcastTrackAction extends Action {
             }
             $filenameOnDisk = $targetName;
         }
-
-        // Ajoute track (avec ou sans fichier)
         $_SESSION['playlists'][$playlistIndex]['tracks'][] = [
             'nom' => $track,
             'file' => $filenameOnDisk
         ];
-
-        return '
-            <h2>Track ajouté : ' . htmlspecialchars($track) . '</h2>
-            '.($filenameOnDisk ? '<p>Fichier '.htmlspecialchars($filenameOnDisk).' uploadé dans audio/</p>' : '<p>Pas de fichier associé.</p>').'
-            <p>Ajouté à la playlist : <strong>' . htmlspecialchars($_SESSION['playlists'][$playlistIndex]['nom']) . '</strong></p>
-            <a href="?action=add-track">Ajouter un autre track</a><br>
-            <a href="?action=playlist">Voir les playlists</a>
-            | <a href="?action=default">Retour à l\'accueil</a>
-        ';
+        return $this->executeGet();
     }
 }
