@@ -1,12 +1,12 @@
 <?php
 namespace iutnc\deefy\action;
 
-// Utilise __DIR__ pour les chemins relatifs
 require_once __DIR__ . '/Action.php';
 require_once __DIR__ . '/DefaultAction.php';
 require_once __DIR__ . '/DisplayPlaylistAction.php';
 require_once __DIR__ . '/AddPlaylistAction.php';
 require_once __DIR__ . '/AddPodcastTrackAction.php';
+require_once __DIR__ . '/AddUserAction.php';
 
 class Dispatcher {
 
@@ -29,6 +29,10 @@ class Dispatcher {
                 break;
             case 'add-track':
                 $act = new AddPodcastTrackAction();
+                $html = $act();
+                break;
+            case 'add-user':
+                $act = new AddUserAction();
                 $html = $act();
                 break;
             case 'default':

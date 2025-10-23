@@ -3,7 +3,6 @@ namespace iutnc\deefy\action;
 
 class DefaultAction extends Action {
 
-    // Fonction utilitaire pour démarrage session si nécessaire
     private function safeSessionStart() {
         if(session_status() !== PHP_SESSION_ACTIVE) {
             session_start();
@@ -12,47 +11,27 @@ class DefaultAction extends Action {
 
     protected function executeGet() : string {
         $this->safeSessionStart();
-        $username = $_SESSION['username'] ?? null;
-        $html = '';
-        if ($username) {
-            $html .= "<h1>Bienvenue, " . htmlspecialchars($username) . " !</h1>";
-            $html .= '
-                <form method="post" action="?action=default">
-                    <input type="hidden" name="logout" value="1">
-                    <button type="submit">Déconnexion</button>
-                </form>
-            ';
-        } else {
-            $err = $_SESSION['login_error'] ?? '';
-            if ($err) {
-                $html .= '<p style="color:red;">' . htmlspecialchars($err) . '</p>';
-                unset($_SESSION['login_error']);
-            }
-            $html .= '
-                <h1>Bienvenue sur DeefyApp</h1>
-                <form method="post" action="?action=default">
-                    <input name="username" placeholder="Votre nom d\'utilisateur">
-                    <button type="submit">Connexion</button>
-                </form>
-            ';
-        }
+
+        $html = '<h1>Bienvenue !</h1>';
+
+        // Menu de navigation pour le TD
+        $html .= '
+            <nav>
+                <ul>
+                    <li><a href="?action=default">Accueil</a></li>
+                    <li><a href="?action=add-playlist">Créer une playlist</a></li>
+                    <li><a href="?action=playlist">Voir les playlists</a></li>
+                    <li><a href="?action=add-track">Ajouter un track</a></li>
+                    <li><a href="?action=add-user">Inscription utilisateur</a></li>
+                </ul>
+            </nav>
+        ';
+
         return $html;
     }
 
     protected function executePost() : string {
-        $this->safeSessionStart();
-        if (isset($_POST['logout'])) {
-            unset($_SESSION['username']);
-            return $this->executeGet();
-        }
-
-        $username = $_POST['username'] ?? null;
-        if ($username && trim($username) !== '') {
-            $_SESSION['username'] = $username;
-            return $this->executeGet();
-        } else {
-            $_SESSION['login_error'] = "Veuillez entrer un nom d'utilisateur !";
-            return $this->executeGet();
-        }
+        // L’accueil n’a pas de formulaire POST pour TD12
+        return $this->executeGet();
     }
 }
