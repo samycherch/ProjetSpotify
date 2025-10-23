@@ -29,10 +29,11 @@ class AddPodcastTrackAction extends Action {
             $msg = '';
         }
         return $msg . '
-            <h2>Ajouter un track/podcast à une playlist</h2>
-            <form method="post" action="?action=add-track">
+            <h2>Ajouter un track à une playlist (avec upload .mp3)</h2>
+            <form method="post" action="?action=add-track" enctype="multipart/form-data">
                 <input name="track" placeholder="Nom du morceau">
                 <select name="playlist">'.$options.'</select>
+                <input type="file" name="audiofile" accept=".mp3">
                 <button type="submit">Ajouter Track</button>
             </form>
             <a href="?action=playlist">Voir les playlists</a>
@@ -44,6 +45,9 @@ class AddPodcastTrackAction extends Action {
         $this->safeSessionStart();
         $track = $_POST['track'] ?? '';
         $playlistIndex = $_POST['playlist'] ?? null;
+        $audioFileInfo = $_FILES['audiofile'] ?? null;
+
+        // Validation
         if (trim($track) === '') {
             $_SESSION['track_error'] = "Veuillez indiquer le nom du morceau !";
             return $this->executeGet();
@@ -52,10 +56,35 @@ class AddPodcastTrackAction extends Action {
             $_SESSION['track_error'] = "Playlist introuvable.";
             return $this->executeGet();
         }
-        $_SESSION['playlists'][$playlistIndex]['tracks'][] = $track;
+
+        $filenameOnDisk = null;
+        if ($audioFileInfo && $audioFileInfo['error'] === UPLOAD_ERR_OK) {
+            $filename = $audioFileInfo['name'];
+            $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+            if ($ext !== 'mp3') {
+                $_SESSION['track_error'] = "Seuls les fichiers .mp3 sont acceptés.";
+                return $this->executeGet();
+            }
+            // Dossier "audio" (assure-toi qu'il existe et qu'il est accessible en écriture)
+            $uploadDir = dirname(__DIR__).DIRECTORY_SEPARATOR.'audio'.DIRECTORY_SEPARATOR;
+            $targetName = uniqid("track_").".mp3";
+            $targetPath = $uploadDir . $targetName;
+            if (!move_uploaded_file($audioFileInfo['tmp_name'], $targetPath)) {
+                $_SESSION['track_error'] = "Échec de l'envoi du fichier !";
+                return $this->executeGet();
+            }
+            $filenameOnDisk = $targetName;
+        }
+
+        // Ajoute track (avec ou sans fichier)
+        $_SESSION['playlists'][$playlistIndex]['tracks'][] = [
+            'nom' => $track,
+            'file' => $filenameOnDisk
+        ];
 
         return '
             <h2>Track ajouté : ' . htmlspecialchars($track) . '</h2>
+            '.($filenameOnDisk ? '<p>Fichier '.htmlspecialchars($filenameOnDisk).' uploadé dans audio/</p>' : '<p>Pas de fichier associé.</p>').'
             <p>Ajouté à la playlist : <strong>' . htmlspecialchars($_SESSION['playlists'][$playlistIndex]['nom']) . '</strong></p>
             <a href="?action=add-track">Ajouter un autre track</a><br>
             <a href="?action=playlist">Voir les playlists</a>
