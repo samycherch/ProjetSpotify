@@ -2,19 +2,13 @@
 namespace iutnc\deefy\action;
 
 class DefaultAction extends Action {
-
     private function safeSessionStart() {
-        if(session_status() !== PHP_SESSION_ACTIVE) {
-            session_start();
-        }
+        if(session_status() !== PHP_SESSION_ACTIVE) session_start();
     }
 
     protected function executeGet() : string {
         $this->safeSessionStart();
-
         $html = '<h1>Bienvenue !</h1>';
-
-        // Menu de navigation pour le TD
         $html .= '
             <nav>
                 <ul>
@@ -26,12 +20,9 @@ class DefaultAction extends Action {
                 </ul>
             </nav>
         ';
-
         return $html;
     }
-
     protected function executePost() : string {
-        // L’accueil n’a pas de formulaire POST pour TD12
         return $this->executeGet();
     }
 }
