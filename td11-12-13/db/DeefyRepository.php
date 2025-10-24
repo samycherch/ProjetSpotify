@@ -5,12 +5,10 @@ class DeefyRepository {
     private static array $config;
     private static ?\PDO $instance = null;
 
-    // Charge le fichier INI de config BDD
     public static function setConfig(string $file) : void {
         self::$config = parse_ini_file($file);
     }
 
-    // Singleton : retourne l’instance PDO
     public static function getInstance() : \PDO {
         if (self::$instance === null) {
             $dsn = "mysql:host=" . self::$config['host'] .
@@ -22,7 +20,6 @@ class DeefyRepository {
         return self::$instance;
     }
 
-    // Récupère toutes les playlists (table playlist)
     public static function getAllPlaylists() : array {
         $pdo = self::getInstance();
         $sql = "SELECT * FROM playlist";
@@ -30,7 +27,6 @@ class DeefyRepository {
         return $result->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-    // Sauvegarde une playlist (nom seulement)
     public static function savePlaylist(string $nom) : int {
         $pdo = self::getInstance();
         $sql = "INSERT INTO playlist (nom) VALUES (?)";
@@ -39,7 +35,13 @@ class DeefyRepository {
         return $pdo->lastInsertId();
     }
 
-    // Sauvegarde une piste/track
+    public static function getAllTracks() : array {
+        $pdo = self::getInstance();
+        $sql = "SELECT * FROM track";
+        $result = $pdo->query($sql);
+        return $result->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
     public static function saveTrack(string $titre, string $file) : int {
         $pdo = self::getInstance();
         $sql = "INSERT INTO track (titre, file) VALUES (?, ?)";
@@ -48,11 +50,30 @@ class DeefyRepository {
         return $pdo->lastInsertId();
     }
 
-    // Lie une piste à une playlist
+    // Jointure version error management
     public static function addTrackToPlaylist(int $trackId, int $playlistId) : void {
         $pdo = self::getInstance();
-        $sql = "INSERT INTO playlist2track (idplaylist, idtrack) VALUES (?, ?)";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([$playlistId, $trackId]);
+        $sql = "INSERT INTO playlist2track (id_pl, id_track) VALUES (?, ?)";
+        try {
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([$playlistId, $trackId]);
+        } catch (\PDOException $e) {
+            if ($e->getCode() === '23000') {
+                throw new \Exception("Cette piste est déjà associée à la playlist.");
+            } else {
+                throw $e;
+            }
+        }
+    }
+
+    public static function getTracksForPlaylist(int $playlistId) : array {
+        $pdo = self::getInstance();
+        $sql = "SELECT t.id, t.titre, t.file
+                  FROM playlist2track p2t
+                  JOIN track t ON t.id = p2t.id_track
+                  WHERE p2t.id_pl = ?";
+        $result = $pdo->prepare($sql);
+        $result->execute([$playlistId]);
+        return $result->fetchAll(\PDO::FETCH_ASSOC);
     }
 }

@@ -12,12 +12,13 @@ class DisplayPlaylistAction extends Action {
 
         // Menu de navigation - exactement même qu'ailleurs (haut de page)
         $menu = '
-            <nav style="margin-bottom:15px; background:#eef; padding:10px;">
+            <nav style="background:#f3f1fc; padding:8px;">
                 <a href="?action=default">Accueil</a> |
                 <a href="?action=add-user">Inscription utilisateur</a> |
                 <a href="?action=add-playlist">Créer une playlist</a> |
                 <a href="?action=playlist">Voir les playlists</a> |
-                <a href="?action=add-track">Ajouter un track</a>
+                <a href="?action=add-track">Ajouter une piste</a> |
+                <a href="?action=add-track-toplaylist">Associer piste/playlist</a>
             </nav>
         ';
 

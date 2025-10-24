@@ -1,15 +1,14 @@
 <?php
-// Autoload si tu utilises PSR4 ou spl_autoload_register, sinon require_once :
-require_once 'action/Dispatcher.php';
-require_once 'db/DeefyRepository.php'; // Adapte le chemin si nécessaire
+// Inclusion Repository et Dispatcher
+require_once __DIR__ . '/db/DeefyRepository.php';
+require_once __DIR__ . '/action/Dispatcher.php';
 
-use iutnc\deefy\db\DeefyRepository;
+// Inclusion automatique de tous les fichiers d'action
+foreach (glob(__DIR__ . '/action/*.php') as $file) require_once $file;
 
-// Charge config BDD pour accès PDO
-DeefyRepository::setConfig('bd.ini'); // Met à jour le chemin si le fichier est ailleurs
+// Chargement config BDD
+\iutnc\deefy\db\DeefyRepository::setConfig(__DIR__ . '/db/bd.ini');
 
-// Lance le dispatcher pour le routage des actions/pages
+// Dispatcher
 $dispatcher = new \iutnc\deefy\action\Dispatcher();
 $dispatcher->run();
-
-
